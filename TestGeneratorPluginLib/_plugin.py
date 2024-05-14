@@ -24,8 +24,8 @@ class Plugin:
                  directories: Iterable[str] = tuple(),
                  requirements: Iterable[str] = tuple(),
 
-                 main_tabs: Iterable[Callable[[BackendManager], MainTab]] = tuple(),
-                 side_tabs: Iterable[SideTab] = tuple(),
+                 main_tabs: dict[str: Callable[[BackendManager], MainTab]] = None,
+                 side_tabs: dict[str: Callable[[BackendManager], SideTab]] = None,
                  ):
         self.name = name
         self.description = description
@@ -39,8 +39,8 @@ class Plugin:
         self._directories = list(directories)
         self._requirements = list(requirements)
 
-        self.main_tabs = list(main_tabs)
-        self.side_tabs = list(side_tabs)
+        self.main_tabs = main_tabs or dict()
+        self.side_tabs = side_tabs or dict()
 
         self._parse_args()
 

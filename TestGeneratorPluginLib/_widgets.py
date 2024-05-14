@@ -6,8 +6,9 @@ from TestGeneratorPluginLib._managers import BackendManager
 
 
 class MainTab(KitVBoxLayout):
-    def __init__(self):
+    def __init__(self, name=''):
         super().__init__()
+        self.name = name
         self.need_project = False
 
     def command(self, *args, **kwargs):
@@ -18,9 +19,11 @@ class SideTab(KitHBoxLayout):
     startResizing = pyqtSignal()
     resized = pyqtSignal(int)
 
-    def __init__(self, bm: BackendManager, name=''):
+    def __init__(self, bm: BackendManager, name='', icon=''):
         super().__init__()
         self.bm = bm
+        self.name = name
+        self.icon = icon
         self.side_panel_width = 300
 
         self.__layout = KitVBoxLayout()

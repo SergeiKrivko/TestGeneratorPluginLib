@@ -36,3 +36,11 @@ class BuiltPlugin:
     def conflicts(self) -> list:
         return self._plugin.conflicts
 
+    @property
+    def main_tabs(self):
+        return self._plugin.main_tabs
+
+    @property
+    def side_tabs(self):
+        return self._plugin.side_tabs
+

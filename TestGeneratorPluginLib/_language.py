@@ -1,5 +1,7 @@
 from enum import Enum
-from typing import Type, Callable
+from typing import Type, Callable, Any
+
+from TestGeneratorPluginLib._managers import BackendManager
 
 try:
     from PyQtUIkit.themes.languages import _languages, _names, _Language
@@ -38,7 +40,7 @@ class Language:
 
 
 class _FastRunOption:
-    def __init__(self, name: str, icon: str, function: Callable):
+    def __init__(self, name: str, icon: str, function: Callable[[str, BackendManager], Any]):
         self._name = name
         self._icon = icon
         self._function = function

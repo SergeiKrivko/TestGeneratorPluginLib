@@ -70,8 +70,7 @@ class Plugin:
             shutil.copytree(el, os.path.join(build_path, el))
         shutil.copy(argv[0], os.path.join(build_path, os.path.basename(argv[0])))
 
-        for req in self._requirements:
-            subprocess.run(['pip', 'install', req, '-t', os.path.join(build_path, '__packages__')])
+        subprocess.run(['pip', 'install', self._requirements, '-t', os.path.join(build_path, '__packages__')])
 
         with open(os.path.join(build_path, '__plugin__.py'), 'w', encoding='utf-8') as f:
             f.write(f"""from TestGeneratorPluginLib._built_plugin import BuiltPlugin

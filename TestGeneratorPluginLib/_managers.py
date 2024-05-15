@@ -1,6 +1,6 @@
 from typing import Callable, Any
 
-from PyQt6.QtCore import QThread
+from PyQt6.QtCore import QThread, QObject
 
 
 class BackendManager:
@@ -33,3 +33,19 @@ class _ProjectsManager:
     @property
     def current(self):
         return None
+
+
+class Manager(QObject):
+    def __init__(self, bm):
+        super().__init__()
+        self._bm = bm
+
+    async def load(self):
+        pass
+
+    async def close(self):
+        pass
+
+    async def indexing(self):
+        pass
+

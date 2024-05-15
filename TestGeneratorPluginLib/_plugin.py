@@ -6,7 +6,8 @@ import sys
 from sys import argv
 from typing import Iterable, Callable
 
-from TestGeneratorPluginLib import BackendManager
+from TestGeneratorPluginLib import BackendManager, Manager
+from TestGeneratorPluginLib._language import _FastRunOption
 from TestGeneratorPluginLib._widgets import MainTab, SideTab
 
 
@@ -26,6 +27,8 @@ class Plugin:
 
                  main_tabs: dict[str: Callable[[BackendManager], MainTab]] = None,
                  side_tabs: dict[str: Callable[[BackendManager], SideTab]] = None,
+                 managers: dict[str: Callable[[BackendManager], Manager]] = None,
+                 fast_run_options: dict[str, list[_FastRunOption]] = None,
                  ):
         self.name = name
         self.description = description
@@ -41,6 +44,8 @@ class Plugin:
 
         self.main_tabs = main_tabs or dict()
         self.side_tabs = side_tabs or dict()
+        self.managers = managers or dict()
+        self.fast_run_options = fast_run_options or dict()
 
         self._parse_args()
 

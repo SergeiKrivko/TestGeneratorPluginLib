@@ -52,19 +52,21 @@ class Plugin:
     def _parse_args(self):
         _parser = argparse.ArgumentParser()
         _parser.add_argument('-b', '--build', action='store_true')
+        _parser.add_argument('-o', '--output')
         _parser.add_argument('-u', '--upload', action='store_true')
         args = _parser.parse_args()
 
         if args.build:
-            self._build()
+            self._build(args.output)
 
-    def _build(self):
+    def _build(self, output=None):
         build_path = f'build/{self.name}'
-        dist_path = f'dist/{self.name}.TGPlugin'
+        dist_path = output or f'dist/{self.name}.TGPlugin'
         if os.path.isdir(build_path):
             shutil.rmtree(build_path)
         os.makedirs(build_path)
-        os.makedirs(os.path.dirname(dist_path), exist_ok=True)
+        if os.path.dirname(dist_path):
+            os.makedirs(os.path.dirname(dist_path), exist_ok=True)
 
         for el in self._directories:
             shutil.copytree(el, os.path.join(build_path, el))

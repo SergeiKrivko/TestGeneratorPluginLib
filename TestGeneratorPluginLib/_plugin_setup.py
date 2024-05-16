@@ -67,8 +67,8 @@ class PluginSetup:
             f.write(f"""from TestGeneratorPluginLib._built_plugin import BuiltPlugin
 from {self._plugin[:self._plugin.rindex('.')]} import {self._plugin[self._plugin.rindex('.') + 1:]} as Plugin
 
-__plugin__ = BuiltPlugin(Plugin, '{self.name}', '{self.description}', '{self.version}', '{self.author}',
-                         '{self.url}', {self.dependencies}, {self.conflicts}, {self.platform_specific}, 
+__plugin__ = BuiltPlugin(Plugin, {repr(self.name)}, {repr(self.description)}, {repr(self.version)}, {repr(self.author)},
+                         {repr(self.url)}, {self.dependencies}, {self.conflicts}, {self.platform_specific}, 
                          '{sys.platform}')
 """)
 

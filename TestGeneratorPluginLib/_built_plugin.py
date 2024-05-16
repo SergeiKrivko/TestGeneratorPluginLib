@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Iterable, Type
 
 from TestGeneratorPluginLib._language import _FastRunOption
 from TestGeneratorPluginLib._plugin import Plugin
@@ -8,42 +8,63 @@ from TestGeneratorPluginLib._widgets import MainTab, SideTab
 
 class BuiltPlugin:
     def __init__(self,
-                 plugin: Plugin,
-                 platform: str):
-        self._plugin = plugin
-        self._platform = platform if plugin.platform_specific else ''
+                 plugin: Type,
+                 name: str,
+                 description: str,
+                 version: str,
+                 author: str,
+                 url='',
+                 dependencies: Iterable[str] = tuple(),
+                 conflicts: Iterable[str] = tuple(),
+                 platform_specific=False,
+
+                 platform: str = ''):
+        self._name = name
+        self._description = description
+        self._version = version
+        self._author = author
+        self._url = url
+        self._dependencies = dependencies
+        self._conflicts = conflicts
+
+        self._plugin_class = plugin
+        self._plugin: Plugin | None = None
+        self._platform = platform if platform_specific else ''
+
+    def init(self, bm):
+        self._plugin = self._plugin_class(bm)
 
     @property
     def name(self) -> str:
-        return self._plugin.name
+        return self._name
 
     @property
     def description(self) -> str:
-        return self._plugin.description
+        return self._description
 
     @property
     def version(self) -> str:
-        return self._plugin.version
+        return self._version
 
     @property
     def author(self) -> str:
-        return self._plugin.author
+        return self._author
 
     @property
     def url(self) -> str:
-        return self._plugin.url
+        return self._url
 
     @property
     def platform(self) -> str:
         return self._platform
 
     @property
-    def dependencies(self) -> list[str]:
-        return self._plugin.dependencies
+    def dependencies(self) -> Iterable[str]:
+        return self._dependencies
 
     @property
-    def conflicts(self) -> list[str]:
-        return self._plugin.conflicts
+    def conflicts(self) -> Iterable[str]:
+        return self._conflicts
 
     @property
     def main_tabs(self) -> dict[str: Callable[[BackendManager], MainTab]]:
@@ -58,6 +79,6 @@ class BuiltPlugin:
         return self._plugin.managers
 
     @property
-    def fast_run_options(self) -> dict[str, _FastRunOption]:
+    def fast_run_options(self) -> dict[str, list[_FastRunOption]]:
         return self._plugin.fast_run_options
 

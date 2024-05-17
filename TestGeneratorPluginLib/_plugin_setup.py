@@ -9,11 +9,11 @@ from typing import Iterable
 
 class PluginSetup:
     def __init__(self,
-                 plugin: str,
                  name: str,
                  description: str,
                  version: str,
                  author: str,
+                 plugin: str,
                  url='',
                  platform_specific: bool = None,
                  dependencies: Iterable[str] = tuple(),

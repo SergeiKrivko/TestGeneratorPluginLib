@@ -61,5 +61,9 @@ class FastRunFunction(_FastRunOption):
     pass
 
 
+class FastRunAsyncFunction(_FastRunOption):
+    pass
+
+
 class FastRunCommand(_FastRunOption):
     pass

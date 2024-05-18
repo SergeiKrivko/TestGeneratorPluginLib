@@ -1,5 +1,3 @@
 PyQt6
 qasync
 PyQtUIkit
-setuptools
-StdioBridge~=1.0.1

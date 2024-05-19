@@ -92,10 +92,10 @@ __plugin__ = BuiltPlugin(Plugin, {repr(self.name)}, {repr(self.description)}, {r
         service.log_in(args.signup)
 
         platform = sys.platform if self.platform_specific is None and self._requirements or self.platform_specific \
-            else 'none'
+            else 'all'
         service.upload_file(dist_path + '.zip',
-                            f"{self.name}/{platform}/plugin.TGPlugin.zip")
-        service.upload_metadata(self.name + '/data', {
+                            f"{self.name}/{platform}.TGPlugin.zip")
+        service.upload_metadata(self.name, {
             'name': self.name,
             'description': self.description,
             'version': self.version,
@@ -104,7 +104,7 @@ __plugin__ = BuiltPlugin(Plugin, {repr(self.name)}, {repr(self.description)}, {r
             'dependencies': self.dependencies,
             'conflicts': self.conflicts,
         })
-        service.upload_metadata(self.name + f'/version/{platform}', self.version)
+        service.upload_metadata(self.name + '/versions', {platform: self.version})
 
     def _signup(self, args):
         from TestGeneratorPluginLib._firebase import FirebaseService

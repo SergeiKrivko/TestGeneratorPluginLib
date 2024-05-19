@@ -54,7 +54,7 @@ class FirebaseService:
     def upload_metadata(self, name: str, metadata: dict | str):
         url = f"https://testgenerator-bf37c-default-rtdb.europe-west1.firebasedatabase.app/plugins/" \
               f"{self._user_id}/{name}.json?auth={self._id_token}"
-        resp = requests.put(url, json=metadata)
+        resp = requests.patch(url, json=metadata)
         if not resp.ok:
             raise Exception(f"Error: {resp.text}")
 

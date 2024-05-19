@@ -42,10 +42,20 @@ class PluginSetup:
         _parser.add_argument('-b', '--build', action='store_true')
         _parser.add_argument('-o', '--output')
         _parser.add_argument('-u', '--upload', action='store_true')
+        _parser.add_argument('-e', '--email')
+        _parser.add_argument('-p', '--password')
+        _parser.add_argument('--signup', action='store_true')
+        _parser.add_argument('--verify-email', action='store_true')
         args = _parser.parse_args()
 
-        if args.build:
-            self._build(args.output)
+        if args.build or args.upload:
+            dist_path = self._build(args.output)
+            if args.upload:
+                self._upload(args, dist_path)
+        elif args.signup:
+            self._signup(args)
+        elif args.verify_email:
+            self._signup(args)
 
     def _build(self, output=None):
         build_path = f'build/{self.name}'
@@ -73,3 +83,35 @@ __plugin__ = BuiltPlugin(Plugin, {repr(self.name)}, {repr(self.description)}, {r
 """)
 
         shutil.make_archive(dist_path, 'zip', build_path)
+        return dist_path
+
+    def _upload(self, args, dist_path):
+        from TestGeneratorPluginLib._firebase import FirebaseService
+
+        service = FirebaseService(args.email, args.password)
+        service.log_in(args.signup)
+
+        platform = sys.platform if self.platform_specific is None and self._requirements or self.platform_specific \
+            else 'none'
+        service.upload_file(dist_path + '.zip',
+                            f"{self.name}/{platform}/plugin.TGPlugin.zip")
+        service.upload_metadata(self.name + '/data', {
+            'name': self.name,
+            'description': self.description,
+            'version': self.version,
+            'author': self.author,
+            'url': self.url,
+            'dependencies': self.dependencies,
+            'conflicts': self.conflicts,
+        })
+        service.upload_metadata(self.name + f'/version/{platform}', self.version)
+
+    def _signup(self, args):
+        from TestGeneratorPluginLib._firebase import FirebaseService
+
+        service = FirebaseService(args.email, args.password)
+
+        service.log_in(args.signup)
+        service.verify_email()
+        print("Verified email")
+        input("Press Enter to continue...")

@@ -35,7 +35,8 @@ class BuiltPlugin:
         self._plugin = self._plugin_class(bm)
 
     def terminate(self):
-        self._plugin.terminate()
+        if self._plugin:
+            self._plugin.terminate()
 
     @property
     def name(self) -> str:
